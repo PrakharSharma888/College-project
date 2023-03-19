@@ -1,0 +1,116 @@
+body {
+  overflow: hidden;
+}
+
+/* navbar style */
+nav {
+  background-color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #333;
+  height: 56px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+nav button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0 0.5rem;
+  cursor: pointer;
+}
+
+/* carousel style */
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-item img {
+  height: 100%;
+  object-fit: cover;
+}
+
+/* footer style */
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+footer p {
+  margin: 0;
+}
+
+footer button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0 0.5rem;
+  cursor: pointer;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 16px;
+}
+.navbar-logo img {
+  height: 40px;
+  width: 40px;
+}
+
+.navbar-home,
+.navbar-search,
+.navbar-fund,
+.navbar-login,
+.navbar-signup {
+color: #fff;
+text-decoration: none;
+margin-left: 16px;
+}
+
+.navbar-search {
+flex-grow: 1;
+}
+
+.navbar-home:hover,
+.navbar-search:hover,
+.navbar-fund:hover,
+.navbar-login:hover,
+.navbar-signup:hover {
+text-decoration: underline;
+}
+
+.navbar-login,
+.navbar-signup {
+margin-left: auto;
+}

@@ -1,39 +1,48 @@
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
 contract FundingProcess {
     address public partyA;
     address public partyB;
-    string public govtOrgName;
-    string public representativeName;
-    uint public transferAmount;
-    string public partyBAddress;
-    bool public isApproved;
-    uint public approvalCount;
+    uint public fee = 1 ether;
+    uint public proposalId;
     mapping(address => bool) public approvals;
-
-    constructor(string memory _govtOrgName, string memory _representativeName, uint _transferAmount, string memory _partyBAddress) {
-        partyA = msg.sender;
-        govtOrgName = _govtOrgName;
-        representativeName = _representativeName;
-        transferAmount = _transferAmount;
-        partyBAddress = _partyBAddress;
+    struct transferDetails{
+        address partyAAddress;
+        string _govtOrgName;
+        string _representativeName;
+        uint _transferAmount;
+        address _partyBAddress;
+        bool isApproved;
+        bool isTranfered;
+        string transactionId;
     }
 
-    function approveFunding() public {
-        require(msg.sender != partyA, "Party A cannot approve the funding.");
+    mapping (uint => transferDetails) public fundTransfers;
+
+    function approveFunding(uint _proposalId) public {
+        require(msg.sender == fundTransfers[_proposalId]._partyBAddress, "You are not allowed to vote");
         require(!approvals[msg.sender], "Cannot approve more than once.");
+        require(!fundTransfers[_proposalId].isApproved, "Already approved");
         approvals[msg.sender] = true;
-        approvalCount++;
+        fundTransfers[_proposalId].isApproved = true;
     }
 
-    function transferFunds() public {
-        require(msg.sender == partyA, "Only Party A can initiate the transfer.");
-        require(approvalCount > 0, "At least one approval is required.");
-        require(!isApproved, "Funding has already been approved and transferred.");
-        if (approvalCount > 1) {
-            isApproved = true;
-        }
-        partyB = payable(address(bytes20(bytes(partyBAddress))));
-        partyB.transfer(transferAmount);
+    function transferFunds(uint _proposalId, string memory _transactionId) public payable{
+        require(msg.value > fee, "fees not much given");
+        require(msg.sender == fundTransfers[_proposalId].partyAAddress, "Only Party A can initiate the transfer.");
+        require(fundTransfers[_proposalId].isApproved, "Not approved yet");
+        require(!fundTransfers[_proposalId].isTranfered, "Funding has already been approved and transferred.");
+        fundTransfers[_proposalId].isTranfered = true;
+        fundTransfers[_proposalId].transactionId = _transactionId;
+    }
+
+    function proposeFunding(string memory representativeName, string memory govtOrgName, uint transferAmount, address partyBAddress) public {
+        transferDetails storage transfers = fundTransfers[proposalId];
+        transfers.partyAAddress = msg.sender;
+        transfers._representativeName = representativeName;
+        transfers._govtOrgName = govtOrgName;
+        transfers._transferAmount = transferAmount;
+        transfers._partyBAddress = partyBAddress;
     }
 }
