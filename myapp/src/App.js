@@ -16,7 +16,7 @@ function App() {
     <div>
     <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
         <div className="navbar-brand">
-            <a href="#" className="navbar-logo"><img src="logo.png"/></a>
+            <a href="#" className="navbar-logo"><img src="{logo.png}"/></a>
             <a href="#" className="navbar-home">Home</a>
             <a href="#" className="navbar-home">All Proposals</a>
             <input type="text" placeholder="Search" className="navbar-search"/>
