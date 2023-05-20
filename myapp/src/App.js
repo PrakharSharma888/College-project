@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import logo from './logo.svg';
 import './App.css';
 import img1 from './assets/1.jpeg'
@@ -5,69 +6,111 @@ import img2 from './assets/2.jpeg'
 import img3 from './assets/4.jpeg'
 import { useState } from 'react';
 import Proposal from './proposal.js'
+import Create from './components/Proposals/Create.js'
+import AllProposals from './components/AllProposals.js'
+import Homepage from './components/HomePage.js'
+
 
 function App() {
+
+  const [formDataEntries, setFormDataEntries] = useState([]);
+
+  const handleFormDataFromChild = (newFormDataEntry) => {
+    setFormDataEntries([...formDataEntries, newFormDataEntry]);
+  };
+
   const [proposal, setProposal] = useState(false)
   const handleClick = () => {
-    setProposal(!proposal);
+    console.log(
+      "Button clicked"
+    );
+    setProposal(true);
+    setPro(false);
+    setHome(false);
   }
 
+  const [createPro, setPro] = useState(false)
+  const handleClick2 = () => {
+    console.log(
+      "Button clicked"
+    );
+    setPro(true);
+    setProposal(false);
+    setHome(false);
+  }
+
+  const [home, setHome] = useState(true)
+  const handleClick3 = () => {
+    console.log(
+      "Button clicked"
+    );
+    setHome(true);
+    setPro(false);
+    setProposal(false);
+  }
+
+  const [isWalletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
+
+  const connectWallet = async () => {
+    try {
+      // Check if MetaMask is available
+      if (typeof window.ethereum !== 'undefined') {
+        // Request access to the user's MetaMask accounts
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setWalletAddress(accounts[0]);
+        setWalletConnected(true);
+      } else {
+        console.log('MetaMask not detected.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const disconnectWallet = () => {
+    setWalletAddress('');
+    setWalletConnected(false);
+  };
+
+
   return (
-    <div>
-    <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div className="navbar-brand">
-            <a href="#" className="navbar-logo"><img src="{logo.png}"/></a>
-            <a href="#" className="navbar-home">Home</a>
-            <a href="#" className="navbar-home">All Proposals</a>
-            <input type="text" placeholder="Search" className="navbar-search"/>
-            <a href="#" className="navbar-fund" onClick={handleClick}>Fund</a>
-          </div>
-    </nav>
-    {proposal ? (
-        <><div id="carouselExampleControls" className="carousel slide" data-ride="carousel">
-          <div className="carousel-inner">
-            <div className="carousel-item active">
-              <img className="d-block w-100" src={img1} alt="First slide" width="800" height="900" />
-            </div>
-            <div className="carousel-item">
-              <img className="d-block w-100" src={img2} alt="Second slide" width="800" height="600" />
-            </div>
-            <div className="carousel-item">
-              <img className="d-block w-100" src={img3} alt="Third slide" width="800" height="600" />
-            </div>
-          </div>
-          <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="sr-only">Previous</span>
-          </a>
-          <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="sr-only">Next</span>
-          </a>
-        </div><footer className="footer bg-dark">
-            <div className="container">
-              <div className="row">
-                <div className="col-sm-4">
-                  <a className="navbar-brand" href="#">Home</a>
+  <>
+<nav style={{ backgroundColor: "#4C4C6D" }} class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a style={{ backgroundColor: "#E8F6EF" }} class="navbar-brand m-2 rounded p-2" href="#">BlockFund</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a style={{ backgroundColor: "#E8F6EF" }} onClick={handleClick3} class="nav-link active m-2 rounded p-2" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a style={{ backgroundColor: "#E8F6EF" }} onClick={handleClick} class="nav-link m-2 rounded p-2" href="#">All Proposals</a>
+        </li>
+        <li class="nav-item">
+          <a style={{ backgroundColor: "#E8F6EF" }} onClick={handleClick2} class="nav-link m-2 rounded p-2" href="#">Create Proposal</a>
+        </li>
+      </ul>
+      <div className="ms-auto">
+              {isWalletConnected ? (
+                <div>
+                  <span className="text-light me-2">{`Welcome, ${walletAddress}`}</span>
                 </div>
-                <div className="col-sm-4">
-                  <a className="nav-link" href="#">Search</a>
-                </div>
-                <div className="col-sm-4">
-                  <a className="nav-link" id="fund-button" href="#">Fund</a>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-sm-12">
-                  <p className="text-muted">&copy; 2023 My Webpage. All rights reserved.</p>
-                </div>
-              </div>
+              ) : (
+                <button className="btn btn-outline-light me-2" onClick={connectWallet}>Connect Wallet</button>
+              )}
             </div>
-          </footer></>
-      ) : <Proposal/>}
-    
-</div>
+    </div>
+  </div>
+</nav>
+
+{proposal && <AllProposals formData={formDataEntries} />}
+{createPro && <Proposal sendFormDataToParent={handleFormDataFromChild} handleSubmit={handleClick} />}
+{home && <Homepage/>}
+</>
   );
 }
-
 export default App;
