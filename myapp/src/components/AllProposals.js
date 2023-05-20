@@ -39,18 +39,22 @@ function AllProposals({ formData }) {
 
   return (
     <div>
-      {proposals.map((entry, index) => (
-        <div key={index} className="card d-inline-flex m-3">
-          <div className="card-header">{entry[0]}</div>
-          <div className="card-body justify-content-center">
-            <p className="card-text">Government Organization: {entry[1]}</p>
-            <p className="card-text">Transfer Amount: {entry[2]}</p>
-            <p className="card-text">Party B Address: {entry[3]}</p>
-            <a href="#" onClick={() => handleAccept(index)} className="btn btn-primary m-2">Accept</a>
-            <a href="#" onClick={() => handleDecline(index)} className="btn btn-primary m-2">Decline</a>
+      {proposals.length > 0 ? (
+        proposals.map((entry, index) => (
+          <div key={index} className="card d-inline-flex m-3">
+            <div className="card-header">{entry[0]}</div>
+            <div className="card-body justify-content-center">
+              <p className="card-text">Government Organization: {entry[1]}</p>
+              <p className="card-text">Transfer Amount: {entry[2]}</p>
+              <p className="card-text">Party B Address: {entry[3]}</p>
+              <a href="#" onClick={() => handleAccept(index)} className="btn btn-primary m-2">Accept</a>
+              <a href="#" onClick={() => handleDecline(index)} className="btn btn-primary m-2">Decline</a>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <h1 className="text-center">No Pending Proposals</h1>
+      )}
 
       <Modal
         isOpen={isModalOpen}
