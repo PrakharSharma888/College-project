@@ -1,44 +1,66 @@
 const abi = [
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "_proposalId",
-				"type": "uint256"
-			}
-		],
-		"name": "approveFunding",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "representativeName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "govtOrgName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "transferAmount",
+				"name": "proposalId",
 				"type": "uint256"
 			},
 			{
+				"indexed": false,
 				"internalType": "address",
 				"name": "partyBAddress",
 				"type": "address"
 			}
 		],
-		"name": "proposeFunding",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"name": "ProposalApproved",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "repName",
+				"type": "string"
+			}
+		],
+		"name": "ProposalCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "partyBAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "declineReason",
+				"type": "string"
+			}
+		],
+		"name": "ProposalDeclined",
+		"type": "event"
 	},
 	{
 		"inputs": [
@@ -46,73 +68,23 @@ const abi = [
 				"internalType": "uint256",
 				"name": "_proposalId",
 				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_transactionId",
-				"type": "string"
 			}
 		],
-		"name": "transferFunds",
+		"name": "approveProposal",
 		"outputs": [],
-		"stateMutability": "payable",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "approvals",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "fee",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "fundTransfers",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "partyAAddress",
-				"type": "address"
-			},
 			{
 				"internalType": "string",
-				"name": "_govtOrgName",
+				"name": "_repName",
 				"type": "string"
 			},
 			{
 				"internalType": "string",
-				"name": "_representativeName",
+				"name": "_governmentOrg",
 				"type": "string"
 			},
 			{
@@ -124,34 +96,76 @@ const abi = [
 				"internalType": "address",
 				"name": "_partyBAddress",
 				"type": "address"
-			},
+			}
+		],
+		"name": "createProposal",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
-				"internalType": "bool",
-				"name": "isApproved",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "isTranfered",
-				"type": "bool"
+				"internalType": "uint256",
+				"name": "_proposalId",
+				"type": "uint256"
 			},
 			{
 				"internalType": "string",
-				"name": "transactionId",
+				"name": "_declineReason",
 				"type": "string"
 			}
 		],
-		"stateMutability": "view",
+		"name": "declineProposal",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "partyA",
+		"name": "getAllProposals",
 		"outputs": [
 			{
-				"internalType": "address",
+				"components": [
+					{
+						"internalType": "string",
+						"name": "repName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "governmentOrg",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "transferAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "partyBAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "declined",
+						"type": "bool"
+					},
+					{
+						"internalType": "string",
+						"name": "declineReason",
+						"type": "string"
+					}
+				],
+				"internalType": "struct ProposalContract.Proposal[]",
 				"name": "",
-				"type": "address"
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -159,20 +173,7 @@ const abi = [
 	},
 	{
 		"inputs": [],
-		"name": "partyB",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "proposalId",
+		"name": "proposalCount",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -182,7 +183,56 @@ const abi = [
 		],
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "proposals",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "repName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "governmentOrg",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "transferAmount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "partyBAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "declined",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "declineReason",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
 	}
 ]
 
-export default {abi}
+export default abi

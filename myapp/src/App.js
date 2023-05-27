@@ -9,6 +9,7 @@ import Proposal from './proposal.js'
 import Create from './components/Proposals/Create.js'
 import AllProposals from './components/AllProposals.js'
 import Homepage from './components/HomePage.js'
+import { ethers, Signer } from 'ethers';
 
 
 function App() {
@@ -51,6 +52,7 @@ function App() {
 
   const [isWalletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
+  const [isSigner, setSigner] = useState({});
 
   const connectWallet = async () => {
     try {
@@ -58,6 +60,10 @@ function App() {
       if (typeof window.ethereum !== 'undefined') {
         // Request access to the user's MetaMask accounts
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        setSigner(signer);
+        console.log(typeof signer);
         setWalletAddress(accounts[0]);
         setWalletConnected(true);
       } else {
@@ -108,7 +114,7 @@ function App() {
 </nav>
 
 {proposal && <AllProposals formData={formDataEntries} />}
-{createPro && <Proposal sendFormDataToParent={handleFormDataFromChild} handleSubmit={handleClick} />}
+{createPro && <Proposal isSigner={isSigner} sendFormDataToParent={handleFormDataFromChild} handleSubmit={handleClick} />}
 {home && <Homepage/>}
 </>
   );

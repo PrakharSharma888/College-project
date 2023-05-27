@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
+import abi from './abi/abi.js';
+import {ethers} from 'ethers';
 
-function Proposal({ sendFormDataToParent, handleSubmit }) {
+function Proposal({ sendFormDataToParent, handleSubmit, isSigner }) {
   const [formDataEntries, setFormDataEntries] = useState([]);
   const [RepName, setRName] = useState("");
   const [govtOrgNameValue, setgovtOrgName] = useState("");
@@ -14,6 +16,11 @@ function Proposal({ sendFormDataToParent, handleSubmit }) {
   async function handleClick2(e) {
     e.preventDefault();
 
+    const contract = new ethers.Contract("0x5FbDB2315678afecb367f032d93F642f64180aa3", abi, isSigner);
+    const tx = await contract.createProposal(RepName, govtOrgNameValue, transferAmountValue, partyBAddressValue);
+    await tx.wait()
+    console.log(tx);
+
     let newFormDataEntry = [
       RepName,
       govtOrgNameValue,
@@ -22,7 +29,6 @@ function Proposal({ sendFormDataToParent, handleSubmit }) {
     ];
 
     sendFormDataToParent(newFormDataEntry);
-    sendFormDataToParent([])
 
     setRName("");
     setgovtOrgName("");

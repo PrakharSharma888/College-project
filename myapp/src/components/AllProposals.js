@@ -8,6 +8,7 @@ function AllProposals({ formData }) {
   const [declineIndex, setDeclineIndex] = useState(null);
 
   const handleAccept = (index) => {
+    console.log(formData);
     const updatedProposals = [...proposals];
     updatedProposals.splice(index, 1);
     setProposals(updatedProposals);
